@@ -1,42 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* LokSeva AI Design System - Indian Government Theme */
 
 @layer base {
   :root {
+    /* Government Theme Colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 210 24% 16%;
+    
+    /* Tricolor Inspired */
+    --saffron: 28 100% 53%;
+    --saffron-light: 28 100% 63%;
+    --white: 0 0% 100%;
+    --green: 120 60% 25%;
+    --green-light: 120 50% 35%;
+    --navy: 214 84% 13%;
+    --navy-light: 214 70% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 24% 16%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 24% 16%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 214 84% 13%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 210 24% 16%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 28 100% 53%;
+    --accent-foreground: 0 0% 100%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 28 100% 53%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+    
+    /* Audio Visualization */
+    --audio-primary: 28 100% 53%;
+    --audio-secondary: 120 60% 25%;
+    --audio-bg: 210 40% 98%;
+    
+    /* Chat Colors */
+    --user-message: 214 84% 13%;
+    --agent-message: 120 60% 25%;
+    --transcript-bg: 210 40% 98%;
+    
+    /* Status Colors */
+    --status-connected: 120 60% 25%;
+    --status-listening: 28 100% 53%;
+    --status-thinking: 45 93% 47%;
+    --status-error: 0 84% 60%;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,41 +82,54 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 214 28% 8%;
     --foreground: 210 40% 98%;
+    
+    --saffron: 28 100% 53%;
+    --saffron-light: 28 100% 63%;
+    --white: 0 0% 100%;
+    --green: 120 50% 35%;
+    --green-light: 120 40% 45%;
+    --navy: 214 84% 13%;
+    --navy-light: 214 70% 20%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 214 32% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 214 32% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 28 100% 53%;
+    --primary-foreground: 214 28% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 214 32% 17%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 214 32% 17%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 120 50% 35%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 214 32% 17%;
+    --input: 214 32% 17%;
+    --ring: 28 100% 53%;
+    
+    --audio-primary: 28 100% 53%;
+    --audio-secondary: 120 50% 35%;
+    --audio-bg: 214 32% 12%;
+    
+    --user-message: 28 100% 53%;
+    --agent-message: 120 50% 35%;
+    --transcript-bg: 214 32% 12%;
+    
+    --status-connected: 120 50% 35%;
+    --status-listening: 28 100% 53%;
+    --status-thinking: 45 93% 47%;
+    --status-error: 0 84% 60%;
   }
 }
 
@@ -100,6 +139,73 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Audio Visualizer */
+  .audio-bar {
+    @apply bg-gradient-to-t from-[hsl(var(--audio-primary))] to-[hsl(var(--audio-secondary))] 
+           rounded-full transition-all duration-150 ease-out;
+  }
+  
+  .audio-bar.active {
+    @apply shadow-lg shadow-[hsl(var(--audio-primary))]/20;
+  }
+  
+  /* Chat Bubbles */
+  .chat-bubble-user {
+    @apply bg-[hsl(var(--user-message))] text-white rounded-2xl rounded-br-md
+           shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .chat-bubble-agent {
+    @apply bg-[hsl(var(--agent-message))] text-white rounded-2xl rounded-bl-md
+           shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .chat-bubble-transcript {
+    @apply bg-[hsl(var(--transcript-bg))] border border-[hsl(var(--border))]
+           rounded-xl italic text-muted-foreground;
+  }
+  
+  /* Status Indicators */
+  .status-connected {
+    @apply text-[hsl(var(--status-connected))] bg-[hsl(var(--status-connected))]/10;
+  }
+  
+  .status-listening {
+    @apply text-[hsl(var(--status-listening))] bg-[hsl(var(--status-listening))]/10;
+  }
+  
+  .status-thinking {
+    @apply text-[hsl(var(--status-thinking))] bg-[hsl(var(--status-thinking))]/10;
+  }
+  
+  .status-error {
+    @apply text-[hsl(var(--status-error))] bg-[hsl(var(--status-error))]/10;
+  }
+  
+  /* Tricolor Header */
+  .tricolor-border {
+    @apply border-t-4 border-t-[hsl(var(--saffron))] 
+           border-l-4 border-l-[hsl(var(--white))]
+           border-r-4 border-r-[hsl(var(--green))];
+  }
+  
+  /* Mic Button */
+  .mic-button-active {
+    @apply bg-gradient-to-br from-[hsl(var(--saffron))] to-[hsl(var(--saffron-light))]
+           shadow-lg shadow-[hsl(var(--saffron))]/25 scale-105;
+  }
+  
+  .mic-button-inactive {
+    @apply bg-gradient-to-br from-[hsl(var(--navy))] to-[hsl(var(--navy-light))]
+           hover:shadow-md hover:scale-102;
   }
 }
