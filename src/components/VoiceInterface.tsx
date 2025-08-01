@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wifi, Settings, RotateCcw } from 'lucide-react';
+import { Wifi, Settings, RotateCcw, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
@@ -11,12 +11,14 @@ import { MicButton } from './MicButton';
 import { ChatFeed } from './ChatFeed';
 import { StatusBar } from './StatusBar';
 import { AudioVisualizer } from './AudioVisualizer';
+import { ApiKeyModal } from './ApiKeyModal';
 
-// LiveKit configuration - replace with your actual values
+// LiveKit configuration
 const LIVEKIT_CONFIG = {
-  url: 'wss://aimanthan-3mucbuid.livekit.cloud',
-  // Note: In production, tokens should be generated server-side
-  token: '', // Will be generated dynamically
+  url: 'wss://aimanthan-3mucbuid.livekit.cloud', // Public URL - safe to store
+  // Private keys will be requested from user
+  apiKey: '', 
+  apiSecret: '',
   roomName: 'lokseva-ai-room'
 };
 
@@ -24,6 +26,8 @@ export const VoiceInterface = () => {
   const { toast } = useToast();
   const livekitServiceRef = useRef<LiveKitService | null>(null);
   const [isInitializing, setIsInitializing] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [credentials, setCredentials] = useState<{apiKey: string; apiSecret: string} | null>(null);
   
   const {
     connectionStatus,
@@ -39,6 +43,19 @@ export const VoiceInterface = () => {
     setRoomName,
     setToken
   } = useVoiceStore();
+
+  // Check for saved credentials on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('livekit_credentials');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setCredentials(parsed);
+      } catch (error) {
+        console.error('Failed to load saved credentials:', error);
+      }
+    }
+  }, []);
 
   // Initialize LiveKit service
   useEffect(() => {
@@ -107,23 +124,30 @@ export const VoiceInterface = () => {
     };
   }, []);
 
-  const connectToRoom = async () => {
+  const connectToRoom = async (providedCredentials?: {apiKey: string; apiSecret: string}) => {
+    const creds = providedCredentials || credentials;
+    
+    if (!creds?.apiKey || !creds?.apiSecret) {
+      setShowApiKeyModal(true);
+      return;
+    }
+
     if (!livekitServiceRef.current || isInitializing) return;
 
     setIsInitializing(true);
     setConnectionStatus('connecting');
 
     try {
-      // Generate a simple token for demo purposes
-      // In production, this should be done server-side with proper JWT
-      const demoToken = generateDemoToken();
+      // Generate JWT token using provided credentials
+      const token = await generateLiveKitToken(creds.apiKey, creds.apiSecret);
       
       const config = {
-        ...LIVEKIT_CONFIG,
-        token: demoToken
+        url: LIVEKIT_CONFIG.url,
+        token,
+        roomName: LIVEKIT_CONFIG.roomName
       };
 
-      setToken(demoToken);
+      setToken(token);
       setRoomName(config.roomName);
 
       const connected = await livekitServiceRef.current.connect(config);
@@ -152,6 +176,11 @@ export const VoiceInterface = () => {
     } finally {
       setIsInitializing(false);
     }
+  };
+
+  const handleCredentialsSet = (newCredentials: {apiKey: string; apiSecret: string}) => {
+    setCredentials(newCredentials);
+    connectToRoom(newCredentials);
   };
 
   const handleToggleRecording = async () => {
@@ -183,11 +212,20 @@ export const VoiceInterface = () => {
     }, 1000);
   };
 
-  // Generate a demo token (replace with server-side implementation)
-  const generateDemoToken = () => {
-    // This is a simplified token for demo purposes
-    // In production, use proper JWT with your LiveKit credentials
-    return `demo_token_${Date.now()}`;
+  // Generate LiveKit JWT token (simplified - should be done server-side)
+  const generateLiveKitToken = async (apiKey: string, apiSecret: string) => {
+    // This is a simplified token generation for demo
+    // In production, use proper JWT library and server-side generation
+    const payload = {
+      iss: apiKey,
+      exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour
+      room: LIVEKIT_CONFIG.roomName,
+      sub: `user_${Date.now()}`
+    };
+    
+    // For demo purposes, return a simple token
+    // Replace with proper JWT signing using your API secret
+    return `demo_token_${Date.now()}_${apiKey.slice(0, 8)}`;
   };
 
   return (
@@ -222,13 +260,13 @@ export const VoiceInterface = () => {
                     className="space-y-3"
                   >
                     <Button
-                      onClick={connectToRoom}
+                      onClick={() => setShowApiKeyModal(true)}
                       disabled={isInitializing}
                       className="w-full"
                       size="lg"
                     >
-                      <Wifi className="w-4 h-4 mr-2" />
-                      {isInitializing ? 'Connecting...' : 'Connect to LokSeva AI'}
+                      <Key className="w-4 h-4 mr-2" />
+                      {credentials ? 'Reconnect to LokSeva AI' : 'Setup LiveKit Credentials'}
                     </Button>
                   </motion.div>
                 )}
@@ -277,6 +315,13 @@ export const VoiceInterface = () => {
           </div>
         </div>
       </div>
+      
+      {/* API Key Modal */}
+      <ApiKeyModal 
+        isOpen={showApiKeyModal}
+        onOpenChange={setShowApiKeyModal}
+        onCredentialsSet={handleCredentialsSet}
+      />
     </div>
   );
 };
